@@ -1,7 +1,10 @@
+import json
 from time import sleep
 import datetime
+
+from base.pysnippets import *
 from pages.follow_flow import FollowFLow
-from base.snippets import *
+from base.followers_snippets import *
 
 from pages.before_sign import BeforeSign
 from configuration.conftest import credentials, driver
@@ -12,7 +15,7 @@ from configuration.conftest import credentials, driver
 # 150 unfollow per day
 
 class TestFollowSteps:
-    username_list = ["genosstore_','mirzz_X"]
+    username_list = ["genosstore_", "mirzz_X"]
     total = 0
     last_day = None
 
@@ -26,38 +29,66 @@ class TestFollowSteps:
         current_day = datetime.date.today()
 
         for username in self.username_list:
-            driver.execute_script(run_js_script(username))
-            follower_usernames = driver.execute_script("return followers.map(follower => follower.username);")
-            following_usernames = driver.execute_script("return followings.map(following => following.username);")
+            # driver.execute_script(run_js_script(username))
+            # pyscript = run_script(username)
+            # print("py ", pyscript)
+            #
+            # scripts = run_js_script(username)
+            # # run_script("genosstore_")
+            # modified_script = script.replace('{username}', username)
+            # driver.execute_script(scripts)
+            # followers = driver.execute_script(scripts)
+            followers_script = run_js_script(username)
+            followers = driver.execute_async_script(followers_script)
+            # print(followers)
+
+
+            # followers_script = run_js_script(username)
+            # followers = driver.execute_script(followers_script)
+
+            # print("data1", followers, "\n")
+            sleep(15)
+            # r = driver.execute_script("followers")
+            # print(r)
+            print(followers)
+
+            sleep(10)
+
+            # run_script("genosstore_")
+            # sleep(10)
+            # while not driver.execute_script("return followersPopulated;"):
+            #     sleep(1)
+            # follower_usernames = driver.execute_script("return followers.map(follower => follower.username);")
+            # following_usernames = driver.execute_script("return followings.map(following => following.username);")
 
             # Print the retrieved values
-            print("Follower Usernames:", follower_usernames)
-            print("Following Usernames:", following_usernames)
-
-            follower_length = len(follower_usernames)
+            # print("Follower Usernames:", follower_usernames)
+            # print("Following Usernames:", following_usernames)
+            # start logic
+            # follower_length = len(follower_usernames)
             counter = 0
-            for follower_username in follower_usernames:
-                if counter != follower_length:
-                    follow_flow.open_shop_page(f"https://www.instagram.com/{follower_username}")
-                    follow_flow.follow_shop()
-                    counter += 1
-                    self.total += 0
-                    if self.total == 199:
-                        sleep_duration = (datetime.datetime.now() + datetime.timedelta(days=1)).replace(0, 0, 0, 0, 0,
-                                                                                                        0,
-                                                                                                        0) - datetime.datetime.now()
-                        print(f"Total reached 199. Sleeping until next day ({sleep_duration}).")
-                        sleep(sleep_duration.total_seconds())
-                        self.total = 0
-                        self.last_day = current_day
-                    elif self.total > 199:
-                        if current_day != self.last_day:
-                            self.total = 0
-                            self.last_day = current_day
-                            print("Resetting total count for the new day.")
-                        break
-                    if counter % 8 == 0 and counter != 0:
-                        sleep(3600)
-                else:
-                    counter = 0
-                    break
+            # for follower_username in follower_usernames:
+            #     if counter != follower_length:
+            #         follow_flow.open_shop_page(f"https://www.instagram.com/{follower_username}")
+            #         follow_flow.follow_shop()
+            #         counter += 1
+            #         self.total += 0
+            #         if self.total == 199:
+            #             sleep_duration = (datetime.datetime.now() + datetime.timedelta(days=1)).replace(0, 0, 0, 0, 0,
+            #                                                                                             0,
+            #                                                                                             0) - datetime.datetime.now()
+            #             print(f"Total reached 199. Sleeping until next day ({sleep_duration}).")
+            #             sleep(sleep_duration.total_seconds())
+            #             self.total = 0
+            #             self.last_day = current_day
+            #         elif self.total > 199:
+            #             if current_day != self.last_day:
+            #                 self.total = 0
+            #                 self.last_day = current_day
+            #                 print("Resetting total count for the new day.")
+            #             break
+            #         if counter % 8 == 0 and counter != 0:
+            #             sleep(3600)
+            #     else:
+            #         counter = 0
+            #         break

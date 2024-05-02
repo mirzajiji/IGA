@@ -10,6 +10,7 @@ class BeforeSign(Base):
     __url = "https://www.instagram.com/"
     __allow_all_cookies = (By.XPATH, "//button[@class='_a9-- _ap36 _a9_0']")
     __not_now = (By.XPATH, "//button[@class='_a9-- _ap36 _a9_1']")
+    __not_now2 = (By.XPATH, "//div[@class='_ac8f']")
     __user_name_field = (By.XPATH, "//input[@aria-label='Phone number, username, or email']")
     __password_field = (By.XPATH, "//input[@aria-label='Password']")
     __login_button = (By.XPATH,
@@ -35,6 +36,13 @@ class BeforeSign(Base):
         sleep(2)
         super()._click(self.__login_button)
         sleep(5)
-        super()._click(self.__not_now)
-
+        sleep(50)
+        try:
+            super()._click(self.__not_now2)
+        except NoSuchElementException as e:
+            sleep(5)
+        try:
+            super()._click(self.__not_now)
+        except NoSuchElementException as e:
+            sleep(5)
         sleep(5)
