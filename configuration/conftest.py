@@ -11,7 +11,7 @@ def environment() -> bool:
 
 @pytest.fixture(scope="module")
 def credentials():
-    return {'username': 'vertex1jiji@gmail.com', 'password': 'rtuliparoli.!@#$'}
+    return {'username': 'vertex1jiji@gmail.com', 'password': 'dzalianrtuliparoli.!@#$'}
     # return {'username': 'vertex2jiji@gmail.com', 'password': 'paroliparoli'}
 
 
