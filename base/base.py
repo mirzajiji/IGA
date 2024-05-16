@@ -30,6 +30,17 @@ class Base:
             self._wait_until_element_is_visible(locator, time)
             self._find(locator).send_keys(Keys.TAB)
 
+    def _get_log(self):
+        full_log = []
+        logs = self._driver.get_log('browser')
+        print(logs)
+
+        # for follower in logs:
+            # full_log.append(f"Timestamp: {log['timestamp']}, Level: {log['level']}, Message: {log['message']}")
+            # full_log.append((f"Username: {follower['username']}, Full Name: {follower['full_name']}"))
+
+        return full_log
+
     def _send_space_multiple_times(self, locator: tuple, count, time: int = 10):
         for x in range(count):
             self._wait_until_element_is_visible(locator, time)
@@ -81,3 +92,12 @@ class Base:
     def _open_new_tab(self):
         self._driver.execute_script("window.open('');")
         self._driver.switch_to.window(self._driver.window_handles[-1])
+
+    def _get_cookies(self):
+        self._driver.get_cookies()
+
+    def _add_cookie(self, cookie):
+        self._driver.add_cookie(cookie)
+
+    def _refresh(self):
+        self._driver.refresh()

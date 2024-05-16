@@ -11,17 +11,24 @@ def environment() -> bool:
 
 @pytest.fixture(scope="module")
 def credentials():
-    return {'username': 'vertex1jiji@gmail.com', 'password': 'rtuliparoli.123$'}
+    return {'username': 'vertex1jiji@gmail.com', 'password': 'rtuliparoli.!@#$'}
     # return {'username': 'vertex2jiji@gmail.com', 'password': 'paroliparoli'}
 
 
 @pytest.fixture()
 def driver():
     options = Options()
+    options.add_argument("--disable-notifications");
     # options.binary_location = "C:\\Users\\Documents\\chromedriver.exe"
 
-    chrome_driver_path = os.path.join(os.path.dirname(__file__), 'chromedriver.exe')
-    options.binary_location = chrome_driver_path
+    # chrome_driver_path = os.path.join(os.path.dirname(__file__), 'chromedriver.exe')
+    # options.binary_location = chrome_driver_path
 
     my_driver = webdriver.Chrome(options=options)
+    print("my driver",my_driver)
+    print("binary",options.binary_location)
+    # print("chrome",chrome_driver_path)
+
+
+
     yield my_driver
