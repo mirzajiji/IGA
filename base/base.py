@@ -1,3 +1,6 @@
+import random
+from time import sleep
+
 from selenium.common import NoSuchElementException
 from selenium.webdriver import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -25,6 +28,10 @@ class Base:
         self._wait_until_element_is_visible(locator, time)
         self._find(locator).click()
 
+    def _send_keys(self, locator: tuple, key, time: int = 10):
+        self._wait_until_element_is_visible(locator, time)
+        self._find(locator).send_keys(key)
+
     def _send_tab_multiple_times(self, locator: tuple, count, time: int = 10):
         for x in range(count):
             self._wait_until_element_is_visible(locator, time)
@@ -36,8 +43,8 @@ class Base:
         print(logs)
 
         # for follower in logs:
-            # full_log.append(f"Timestamp: {log['timestamp']}, Level: {log['level']}, Message: {log['message']}")
-            # full_log.append((f"Username: {follower['username']}, Full Name: {follower['full_name']}"))
+        # full_log.append(f"Timestamp: {log['timestamp']}, Level: {log['level']}, Message: {log['message']}")
+        # full_log.append((f"Username: {follower['username']}, Full Name: {follower['full_name']}"))
 
         return full_log
 

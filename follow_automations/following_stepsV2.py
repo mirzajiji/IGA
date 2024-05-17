@@ -9,7 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from configuration.conftest import credentials, driver
 from pages.before_sign import BeforeSign
-from pages.follow_flow import FollowFLow
+from pages.follow_flow import FollowFLow, detect_url_parse, get_path, random_sleep
 
 
 # rules
@@ -20,7 +20,6 @@ from pages.follow_flow import FollowFLow
 class TestMessageSteps:
     total = 0
     last_day = None
-    text = "Hii You look great. We would love to promote you on our Page. Are you interested? Please direct message at @v1_usr. Give my reference 'dh'. Send message 'dh' to @v1_usr.\n"
 
     def test_follow_from_post_likes_url(self, driver, credentials):
         global like, follow_status, follow_button, element_locator
@@ -37,61 +36,39 @@ class TestMessageSteps:
             , "https://www.instagram.com/p/C3BPFu_SCSf/?img_index=1"
             , "https://www.instagram.com/p/C6xHN4XOQm_/?img_index=1"
                 ]
-
+        follow_path = f"/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div[2]/div/div/div[8]/div/div/div/div[3]/div/button"
         follow_flow = FollowFLow(driver)
         before_sign_page = BeforeSign(driver)
         # message_flow = MessagePage(driver)
         before_sign_page.open()
-
+        total_count = 1
+        iteration_count = 1
         if authorised:
             before_sign_page.logged_in()
             sleep(2)
             for url in urls:
                 likes = follow_flow.follow_from_post_likes(url)
-                total_count = 1
-                iteration_count = 1
-                current_day = datetime.date.today(), datetime.time()
+                current_day = datetime.date.today(), datetime.time().hour, datetime.time().minute
                 print("start: ", current_day)
                 for like in range(1, likes):
-                    sleep(2)
-
-                    index = like
-                    follow_path = f"/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div[2]/div/div/div[8]/div/div/div/div[3]/div/button"
-
                     if total_count > 8:
-
                         follow_path = "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div[2]/div/div/div[9]/div/div/div/div[3]/div/button"
-                        element_locator = (By.XPATH, follow_path)
-
                     else:
                         follow_path = f"/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div[2]/div/div/div[{like}]/div/div/div/div[3]/div/button"
-                        element_locator = (By.XPATH, follow_path)
-                        follow_button = WebDriverWait(driver, 10).until(
-                            EC.visibility_of_element_located(element_locator))
-                        follow_button.send_keys(Keys.ARROW_DOWN, Keys.ARROW_DOWN)
-
-                    follow_button = WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located(element_locator))
-                    follow_status = follow_button.text
-
-                    if follow_status == "Following" or follow_status == "Requested":
-                        follow_button.send_keys(Keys.ARROW_DOWN, Keys.ARROW_DOWN)
-
-                    elif follow_status != "Following" or follow_status != "Requested":
-
-                        follow_button.send_keys(Keys.ARROW_DOWN, Keys.ARROW_DOWN)
-                        follow_button.click()
-                        sleep_duration = random.uniform(1, 8)
+                    element_locator = (By.XPATH, follow_path)
+                    sleep(2)
+                    status = follow_flow.check_if_followed(element_locator)
+                    if status:
+                        follow_flow.scroll_down(element_locator)
+                    else:
+                        follow_flow.follow_click(element_locator)
+                        follow_flow.scroll_down(element_locator)
+                        random_sleep(8)
                         iteration_count += 1
                         total_count += 1
-                        sleep(sleep_duration)
-                    else:
-                        print("skipped")
 
-                current_day = datetime.date.today(), datetime.time()
-                print("=ends: ", current_day)
-                print("followed ", iteration_count, "accounts")
-            sleep(300)
+            detect_url_parse(iteration_count)
+            sleep(200)
 
         else:
             before_sign_page.execute_login(credentials)

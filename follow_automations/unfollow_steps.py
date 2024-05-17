@@ -4,6 +4,7 @@ from time import sleep
 from configuration.conftest import credentials, driver
 from pages.before_sign import BeforeSign
 from pages.message_page import MessagePage
+from pages.unfollow_flow import UnfollowFLow
 
 
 # rules
@@ -20,7 +21,7 @@ class TestMessageSteps:
     def test_get_usernames(self, driver, credentials):
         authorised = True
         global state
-        with open('message_list.json', encoding='utf-8') as f:
+        with open('unfollow_list.json', encoding='utf-8') as f:
             data = json.load(f)
 
         # Extract usernames
@@ -30,18 +31,17 @@ class TestMessageSteps:
         print("Usernames:", usernames)
 
         before_sign_page = BeforeSign(driver)
-        message_flow = MessagePage(driver)
+        unfollow_flow = UnfollowFLow(driver)
         before_sign_page.open()
 
         if authorised:
             before_sign_page.logged_in()
             sleep(2)
             for username in usernames:
-                message_flow.open_model_page(f"https://www.instagram.com/{username}")
+                unfollow_flow.open_following_page(f"https://www.instagram.com/{username}")
 
-                message_flow.open_message()
-
-                message_flow.start_type(self.text)
+                # unfollow_flow.unfollow()
+                unfollow_flow.unfollow_under_hundred()
 
                 sleep(1)
         else:
