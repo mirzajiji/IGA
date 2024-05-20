@@ -54,9 +54,9 @@ class TestMessageSteps:
                     if total_count > 8:
                         follow_path = "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div[2]/div/div/div[9]/div/div/div/div[3]/div/button"
                     else:
-                        follow_path = f"/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div[2]/div/div/div[{like}]/div/div/div/div[3]/div/button"
+                        follow_path = f"/html/body/div[6]/div[1]/div/div[2]/div/di v/div/div/div/div[2]/div/div/div[{like}]/div/div/div/div[3]/div/button"
                     element_locator = (By.XPATH, follow_path)
-                    sleep(2)
+                    sleep(3)
                     status = follow_flow.check_if_followed(element_locator)
                     if status:
                         follow_flow.scroll_down(element_locator)
