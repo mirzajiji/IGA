@@ -17,7 +17,10 @@ def credentials():
 
 @pytest.fixture()
 def driver():
+    ublock_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'extension', 'adblocker'))
+
     options = Options()
+    options.add_extension(ublock_path)
     options.add_argument("--disable-notifications");
     # options.binary_location = "C:\\Users\\Documents\\chromedriver.exe"
 

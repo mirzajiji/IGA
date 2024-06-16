@@ -28,6 +28,7 @@ class Base:
         self._wait_until_element_is_visible(locator, time)
         self._find(locator).click()
 
+
     def _send_keys(self, locator: tuple, key, time: int = 10):
         self._wait_until_element_is_visible(locator, time)
         self._find(locator).send_keys(key)
